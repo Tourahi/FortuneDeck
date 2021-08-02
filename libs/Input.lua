@@ -1,292 +1,299 @@
---[[
-Copyright (c) 2018 SSYGEN
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-]]--
-
-local input_path = (...):match('(.-)[^%.]+$') .. '.'
-local Input = {}
-Input.__index = Input
-
-Input.all_keys = {
-    " ", "return", "escape", "backspace", "tab", "space", "!", "\"", "#", "$", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/", "0", "1", "2", "3", "4",
-    "5", "6", "7", "8", "9", ":", ";", "<", "=", ">", "?", "@", "[", "\\", "]", "^", "", "`", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
-    "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "capslock", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11", "f12", "printscreen",
-    "scrolllock", "pause", "insert", "home", "pageup", "delete", "end", "pagedown", "right", "left", "down", "up", "numlock", "kp/", "kp*", "kp-", "kp+", "kpenter",
-    "kp0", "kp1", "kp2", "kp3", "kp4", "kp5", "kp6", "kp7", "kp8", "kp9", "kp.", "kp,", "kp=", "application", "power", "f13", "f14", "f15", "f16", "f17", "f18", "f19",
-    "f20", "f21", "f22", "f23", "f24", "execute", "help", "menu", "select", "stop", "again", "undo", "cut", "copy", "paste", "find", "mute", "volumeup", "volumedown",
-    "alterase", "sysreq", "cancel", "clear", "prior", "return2", "separator", "out", "oper", "clearagain", "thsousandsseparator", "decimalseparator", "currencyunit",
-    "currencysubunit", "lctrl", "lshift", "lalt", "lgui", "rctrl", "rshift", "ralt", "rgui", "mode", "audionext", "audioprev", "audiostop", "audioplay", "audiomute",
-    "mediaselect", "brightnessdown", "brightnessup", "displayswitch", "kbdillumtoggle", "kbdillumdown", "kbdillumup", "eject", "sleep", "mouse1", "mouse2", "mouse3",
-    "mouse4", "mouse5", "wheelup", "wheeldown", "fdown", "fup", "fleft", "fright", "back", "guide", "start", "leftstick", "rightstick", "l1", "r1", "l2", "r2", "dpup",
-    "dpdown", "dpleft", "dpright", "leftx", "lefty", "rightx", "righty",
+local insert
+insert = table.insert
+local remove
+remove = table.remove
+local timer
+timer = love.timer
+local keyboard
+keyboard = love.keyboard
+local mouse
+mouse = love.mouse
+local callbacks = {
+  'keypressed',
+  'keyreleased',
+  'mousepressed',
+  'mousereleased',
+  'gamepadpressed',
+  'gamepadreleased',
+  'gamepadaxis',
+  'wheelmoved',
+  'update'
 }
-
-function Input.new()
-    local self = {}
-
-    self.prev_state = {}
-    self.state = {}
-    self.binds = {}
-    self.functions = {}
-    self.repeat_state = {}
-    self.sequences = {}
-
-    -- Gamepads... currently only supports 1 gamepad, adding support for more is not that hard, just lazy.
-    self.joysticks = love.joystick.getJoysticks()
-
-    -- Register callbacks automagically
-    local callbacks = {'keypressed', 'keyreleased', 'mousepressed', 'mousereleased', 'gamepadpressed', 'gamepadreleased', 'gamepadaxis', 'wheelmoved', 'update'}
-    local old_functions = {}
-    local empty_function = function() end
-    for _, f in ipairs(callbacks) do
-        old_functions[f] = love[f] or empty_function
-        love[f] = function(...)
-            old_functions[f](...)
-            self[f](self, ...)
-        end
-    end
-
-    return setmetatable(self, Input)
+local keyToButton = {
+  mouse1 = '1',
+  mouse2 = '2',
+  mouse3 = '3',
+  mouse4 = '4',
+  mouse5 = '5'
+}
+local buttonToKey = {
+  [1] = 'mouse1',
+  [2] = 'mouse2',
+  [3] = 'mouse3',
+  [4] = 'mouse4',
+  [5] = 'mouse5',
+  ['l'] = 'mouse1',
+  ['r'] = 'mouse2',
+  ['m'] = 'mouse3',
+  ['x1'] = 'mouse4',
+  ['x2'] = 'mouse5'
+}
+local copy
+copy = function(t)
+  local out = { }
+  for k, v in pairs(t) do
+    out[k] = v
+  end
+  return out
 end
-
-function Input:bind(key, action)
-    if type(action) == 'function' then self.functions[key] = action; return end
-    if not self.binds[action] then self.binds[action] = {} end
-    table.insert(self.binds[action], key)
+local getTableKeys
+getTableKeys = function(tab)
+  local keyset = { }
+  for k, v in pairs(tab) do
+    keyset[#keyset + 1] = k
+  end
+  return keyset
 end
-
-function Input:pressed(action)
-    if action then
+local Input
+do
+  local _class_0
+  local _base_0 = {
+    bind = function(self, key, action)
+      if type(action) == 'function' then
+        self.functions[key] = action
+        return 
+      end
+      if not self.binds[action] then
+        self.binds[action] = { }
+      end
+      return insert(self.binds[action], key)
+    end,
+    pressed = function(self, action)
+      if action then
         for _, key in ipairs(self.binds[action]) do
-            if self.state[key] and not self.prev_state[key] then
-                return true
-            end
-        end
-
-    else
-        for _, key in ipairs(Input.all_keys) do
-            if self.state[key] and not self.prev_state[key] then
-                if self.functions[key] then
-                    self.functions[key]()
-                end
-            end
-        end
-    end
-end
-
-function Input:released(action)
-    for _, key in ipairs(self.binds[action]) do
-        if self.prev_state[key] and not self.state[key] then
+          if self.state[key] and not self.prevState[key] then
             return true
+          end
         end
-    end
-end
-
-function Input:sequence(...)
-    local sequence = {...}
-    if #sequence <= 1 then error("Use :pressed instead if you only need to check 1 action") end
-    if type(sequence[#sequence]) ~= 'string' then error("The last argument must be an action") end
-    if #sequence % 2 == 0 then error("The number of arguments passed in must be odd") end
-
-    local sequence_key = ''
-    for _, seq in ipairs(sequence) do sequence_key = sequence_key .. tostring(seq) end
-
-    if not self.sequences[sequence_key] then
-        self.sequences[sequence_key] = {sequence = sequence, current_index = 1}
-
-    else
-        if self.sequences[sequence_key].current_index == 1 then
-            local action = self.sequences[sequence_key].sequence[self.sequences[sequence_key].current_index]
-            for _, key in ipairs(self.binds[action]) do
-                if self.state[key] and not self.prev_state[key] then
-                    self.sequences[sequence_key].last_pressed = love.timer.getTime()
-                    self.sequences[sequence_key].current_index = self.sequences[sequence_key].current_index + 1
-                end
+      else
+        for _, key in ipairs(getTableKeys(self.functions)) do
+          if self.state[key] and not self.prevState[key] then
+            self.functions[key]()
+          end
+        end
+      end
+    end,
+    released = function(self, action)
+      for _, key in ipairs(self.binds[action]) do
+        if self.prevState[key] and not self.state[key] then
+          return true
+        end
+      end
+    end,
+    sequence = function(self, ...)
+      local sequence = {
+        ...
+      }
+      if #sequence <= 1 then
+        error("Use pressed if only checking one action.")
+      end
+      if type(sequence[#sequence]) ~= 'string' then
+        error("The last argument must be an action :: string.")
+      end
+      if #sequence % 2 == 0 then
+        error("The number of arguments must be odd.")
+      end
+      local sequenceKey = ''
+      for _, seq in ipairs(sequence) do
+        sequenceKey = sequenceKey .. tostring(seq)
+      end
+      if not self.sequences[sequenceKey] then
+        self.sequences[sequenceKey] = {
+          sequence = sequence,
+          currentIdx = 1
+        }
+      else
+        if self.sequences[sequenceKey].currentIdx == 1 then
+          local action = self.sequences[sequenceKey].sequence[self.sequences[sequenceKey].currentIdx]
+          for _, key in ipairs(self.binds[action]) do
+            if self.state[key] and not self.prevState[key] then
+              self.sequences[sequenceKey].lastPressed = timer.getTime()
+              self.sequences[sequenceKey].currentIdx = self.sequences[sequenceKey].currentIdx + 1
             end
-
+          end
         else
-            local delay = self.sequences[sequence_key].sequence[self.sequences[sequence_key].current_index]
-            local action = self.sequences[sequence_key].sequence[self.sequences[sequence_key].current_index + 1]
-
-            if (love.timer.getTime() - self.sequences[sequence_key].last_pressed) > delay then self.sequences[sequence_key] = nil end
-            for _, key in ipairs(self.binds[action]) do
-                if self.state[key] and not self.prev_state[key] then
-                    if (love.timer.getTime() - self.sequences[sequence_key].last_pressed) <= delay then
-                        if self.sequences[sequence_key].current_index + 1 == #self.sequences[sequence_key].sequence then
-                            self.sequences[sequence_key] = nil
-                            return true
-                        else
-                            self.sequences[sequence_key].last_pressed = love.timer.getTime()
-                            self.sequences[sequence_key].current_index = self.sequences[sequence_key].current_index + 2
-                        end
-                    else
-                        self.sequences[sequence_key] = nil
-                    end
+          local delay = self.sequences[sequenceKey].sequence[self.sequences[sequenceKey].currentIdx]
+          local action = self.sequences[sequenceKey].sequence[self.sequences[sequenceKey].currentIdx + 1]
+          if (timer.getTime() - self.sequences[sequenceKey].lastPressed) > delay then
+            self.sequences[sequenceKey] = nil
+            return 
+          end
+          for _, key in ipairs(self.binds[action]) do
+            if self.state[key] and not self.prevState[key] then
+              if (timer.getTime() - self.sequences[sequenceKey].lastPressed) <= delay then
+                if self.sequences[sequenceKey].currentIdx + 1 == #self.sequences[sequenceKey].sequence then
+                  self.sequences[sequenceKey] = nil
+                  return true
+                else
+                  self.sequences[sequenceKey].lastPressed = timer.getTime()
+                  self.sequences[sequenceKey].currentIdx = self.sequences[sequenceKey].currentIdx + 2
                 end
+              else
+                self.sequences[sequenceKey] = nil
+              end
             end
+          end
         end
-    end
-end
-
-local key_to_button = {mouse1 = '1', mouse2 = '2', mouse3 = '3', mouse4 = '4', mouse5 = '5'}
-local gamepad_to_button = {fdown = 'a', fup = 'y', fleft = 'x', fright = 'b', back = 'back', guide = 'guide', start = 'start',
-                           leftstick = 'leftstick', rightstick = 'rightstick', l1 = 'leftshoulder', r1 = 'rightshoulder',
-                           dpup = 'dpup', dpdown = 'dpdown', dpleft = 'dpleft', dpright = 'dpright'}
-local axis_to_button = {leftx = 'leftx', lefty = 'lefty', rightx = 'rightx', righty = 'righty', l2 = 'triggerleft', r2 = 'triggerright'}
-
-function Input:down(action, interval, delay)
-    if action and delay and interval then
+      end
+    end,
+    down = function(self, action, interval, delay)
+      if action == nil then
+        action = nil
+      end
+      if interval == nil then
+        interval = nil
+      end
+      if delay == nil then
+        delay = nil
+      end
+      if action and interval and delay then
         for _, key in ipairs(self.binds[action]) do
-            if self.state[key] and not self.prev_state[key] then
-                self.repeat_state[key] = {pressed_time = love.timer.getTime(), delay = delay, interval = interval, delay_stage = true}
-                return true
-            elseif self.repeat_state[key] and self.repeat_state[key].pressed then
-                return true
+          if self.state[key] and not self.prevState[key] then
+            self.repeatState[key] = {
+              pressedTime = timer.getTime(),
+              delay = 0,
+              interval = interval,
+              delayed = true
+            }
+            return true
+          else
+            if self.state[key] and self.prevState[key] then
+              return true
             end
+          end
         end
-
-    elseif action and interval and not delay then
+      end
+      if action and interval and not delay then
         for _, key in ipairs(self.binds[action]) do
-            if self.state[key] and not self.prev_state[key] then
-                self.repeat_state[key] = {pressed_time = love.timer.getTime(), delay = 0, interval = interval, delay_stage = false}
-                return true
-            elseif self.repeat_state[key] and self.repeat_state[key].pressed then
-                return true
+          if self.state[key] and not self.prevState[key] then
+            self.repeatState[key] = {
+              pressedTime = timer.getTime(),
+              delay = 0,
+              interval = interval,
+              delayed = false
+            }
+            return true
+          else
+            if self.state[key] and self.prevState[key] then
+              return true
             end
+          end
         end
-
-    elseif action and not interval and not delay then
+      end
+      if action and not interval and not delay then
         for _, key in ipairs(self.binds[action]) do
-            if (love.keyboard.isDown(key) or love.mouse.isDown(key_to_button[key] or 0)) then
-                return true
-            end
-
-            -- Supports only 1 gamepad, add more later...
-            if self.joysticks[1] then
-                if axis_to_button[key] then
-                    return self.state[key]
-                elseif gamepad_to_button[key] then
-                    if self.joysticks[1]:isGamepadDown(gamepad_to_button[key]) then
-                        return true
-                    end
-                end
-            end
+          if keyboard.isDown(key) or mouse.isDown(keyToButton[key] or 0) then
+            return true
+          end
         end
-    end
-end
-
-function Input:unbind(key)
-    for action, keys in pairs(self.binds) do
+      end
+    end,
+    unbind = function(self, key)
+      for action, keys in pairs(self.binds) do
         for i = #keys, 1, -1 do
-            if key == self.binds[action][i] then
-                table.remove(self.binds[action], i)
-            end
+          if key == self.binds[action][i] then
+            remove(self.binds[action], i)
+          end
         end
-    end
-    if self.functions[key] then
+      end
+      if self.functions[key] then
         self.functions[key] = nil
-    end
-end
-
-function Input:unbindAll()
-    self.binds = {}
-    self.functions = {}
-end
-
-local copy = function(t1)
-    local out = {}
-    for k, v in pairs(t1) do out[k] = v end
-    return out
-end
-
-function Input:update()
-    self:pressed()
-    self.prev_state = copy(self.state)
-    self.state['wheelup'] = false
-    self.state['wheeldown'] = false
-
-    for k, v in pairs(self.repeat_state) do
+      end
+    end,
+    unbindAll = function(self)
+      self.binds = { }
+      self.functions = { }
+    end,
+    update = function(self)
+      self:pressed()
+      self.prevState = copy(self.state)
+      self.state['wheelup'] = false
+      self.state['wheeldown'] = false
+      for k, v in pairs(self.repeatState) do
         if v then
-            v.pressed = false
-            local t = love.timer.getTime() - v.pressed_time
-            if v.delay_stage then
-                if t > v.delay then
-                    v.pressed = true
-                    v.pressed_time = love.timer.getTime()
-                    v.delay_stage = false
-                end
-            else
-                if t > v.interval then
-                    v.pressed = true
-                    v.pressed_time = love.timer.getTime()
-                end
+          v.pressed = false
+          local t = timer.getTime() - v.pressedTime
+          if v.delayed then
+            if t > v.delay then
+              v.pressed = true
+              v.pressedTime = timer.getTime()
+              v.delayed = false
             end
+          else
+            if t > v.interval then
+              v.pressed = true
+              v.pressedTime = timer.getTime()
+            end
+          end
         end
+      end
+    end,
+    keypressed = function(self, key)
+      self.state[key] = true
+    end,
+    keyreleased = function(self, key)
+      self.state[key] = false
+      self.repeatState[key] = false
+    end,
+    mousepressed = function(self, x, y, button)
+      self.state[buttonToKey[button]] = true
+    end,
+    mousepressed = function(self, x, y, button)
+      self.state[buttonToKey[button]] = false
+      self.repeatState[buttonToKey[button]] = false
+    end,
+    wheelmoved = function(self, x, y)
+      if y > 0 then
+        self.state['wheelup'] = true
+      end
+      if y < 0 then
+        self.state['wheeldown'] = true
+      end
     end
+  }
+  _base_0.__index = _base_0
+  _class_0 = setmetatable({
+    __init = function(self)
+      self.state = { }
+      self.binds = { }
+      self.functions = { }
+      self.prevState = { }
+      self.repeatState = { }
+      self.sequences = { }
+      local oldCallbacks = { }
+      local emptyF
+      emptyF = function() end
+      for _, f in ipairs(callbacks) do
+        oldCallbacks[f] = love[f] or emptyF
+        love[f] = function(...)
+          oldCallbacks[f](...)
+          if self[f] then
+            return self[f](self, ...)
+          end
+        end
+      end
+    end,
+    __base = _base_0,
+    __name = "Input"
+  }, {
+    __index = _base_0,
+    __call = function(cls, ...)
+      local _self_0 = setmetatable({}, _base_0)
+      cls.__init(_self_0, ...)
+      return _self_0
+    end
+  })
+  _base_0.__class = _class_0
+  Input = _class_0
+  return _class_0
 end
-
-function Input:keypressed(key)
-    self.state[key] = true
-end
-
-function Input:keyreleased(key)
-    self.state[key] = false
-    self.repeat_state[key] = false
-end
-
-local button_to_key = {
-    [1] = 'mouse1', [2] = 'mouse2', [3] = 'mouse3', [4] = 'mouse4', [5] = 'mouse5',
-    ['l'] = 'mouse1', ['r'] = 'mouse2', ['m'] = 'mouse3', ['x1'] = 'mouse4', ['x2'] = 'mouse5'
-}
-
-function Input:mousepressed(x, y, button)
-    self.state[button_to_key[button]] = true
-end
-
-function Input:mousereleased(x, y, button)
-    self.state[button_to_key[button]] = false
-    self.repeat_state[button_to_key[button]] = false
-end
-
-function Input:wheelmoved(x, y)
-    if y > 0 then self.state['wheelup'] = true
-    elseif y < 0 then self.state['wheeldown'] = true end
-end
-
-local button_to_gamepad = {a = 'fdown', y = 'fup', x = 'fleft', b = 'fright', back = 'back', guide = 'guide', start = 'start',
-                           leftstick = 'leftstick', rightstick = 'rightstick', leftshoulder = 'l1', rightshoulder = 'r1',
-                           dpup = 'dpup', dpdown = 'dpdown', dpleft = 'dpleft', dpright = 'dpright'}
-
-function Input:gamepadpressed(joystick, button)
-    self.state[button_to_gamepad[button]] = true
-end
-
-function Input:gamepadreleased(joystick, button)
-    self.state[button_to_gamepad[button]] = false
-    self.repeat_state[button_to_gamepad[button]] = false
-end
-
-local button_to_axis = {leftx = 'leftx', lefty = 'lefty', rightx = 'rightx', righty = 'righty', triggerleft = 'l2', triggerright = 'r2'}
-
-function Input:gamepadaxis(joystick, axis, newvalue)
-    self.state[button_to_axis[axis]] = newvalue
-end
-
-return setmetatable({}, {__call = function(_, ...) return Input.new(...) end})
