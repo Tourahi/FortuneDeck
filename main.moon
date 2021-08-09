@@ -1,18 +1,12 @@
 assert require 'src/Globals'
 
-cardIndx = 1
-
 with love
   .load = ->
-    Dump Input
-    Input\bind 'a', ->
-      if cardIndx == #majorArcana
-        cardIndx = 1
-      else
-        cardIndx+=1
-    export majorArcana = {}
-    Utils.recEnumerateFiles "/assets/majorA",majorArcana
-    Dump {:majorArcana}
+    G_StateMachine\change 'debug'
+    -- Utils.recEnumerateFiles "/assets/majorA",majorArcana
 
+  .update = (dt) ->
+    G_StateMachine\update dt
+    
   .draw = ->
-    Graphics.draw majorArcana[cardIndx], 50, 50
+    G_StateMachine\draw!
