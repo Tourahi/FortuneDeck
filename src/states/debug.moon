@@ -6,8 +6,6 @@ class Debug extends Base
   enter: (params) =>
 
   update: (dt) =>
-    print "In debug state"
-
 
   draw: =>
 
