@@ -16,3 +16,10 @@ Debug = assert require 'src/states/debug'
 export G_StateMachine = StateMachine {
   ['debug']: (params) -> Debug params
 }
+
+-- Assets 
+export MajorArcana = {}
+export MinorArcana = {}
+
+Utils.recEnumerateFiles "/assets/majorA",MajorArcana
+Utils.recEnumerateFiles "/assets/minorA",MinorArcana
