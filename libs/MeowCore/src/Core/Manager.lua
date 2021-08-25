@@ -54,6 +54,13 @@ Manager.getInstance = function()
   return Manager.instance;
 end
 
+Manager.getInstanceRoot = function()
+  if not Manager.instance then
+    Manager.instance = Manager();
+  end
+  return Manager.instance:getRootCtrl();
+end
+
 Manager.createRootCtrl = function(self)
   local ctrl = Root();
   self.rootCtrl = ctrl;
