@@ -84,5 +84,21 @@ Root.addChildTip = function(self, child)
   self.tipContainer:addChild(child);
 end
 
+Root.removeChildCore = function(self, child)
+  self.coreContainer:removeChild(child);
+end
+
+
+Root.removeChildPopup = function(self, child)
+  self.popupContainer:removeChild(child);
+end
+
+Root.removeChildOption = function(self, child)
+  self.optionContainer:removeChild(child);
+end
+
+Root.removeChildTip = function(self, child)
+  self.tipContainer:removeChild(child);
+end
 
 return Root;

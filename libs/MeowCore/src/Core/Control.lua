@@ -336,6 +336,10 @@ Control.removeChild = function(self ,child)
   end
 end
 
+Control.dropChildren = function(self)
+  self.children = {};
+end
+
 Control.sortChildren = function(self)
   table.sort(self.children, function(a, b)
     return a.depth < b.depth;

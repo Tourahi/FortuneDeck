@@ -17,6 +17,7 @@ SelectOpt = Control\extend "SelectOpt",{
   bgColor: nil
   bgOffsetX: 5
   bgOffsetY: 5
+  alpha: 1
 }
 
 
@@ -28,7 +29,7 @@ with SelectOpt
     @color = color
     @setClip true
     @setEnabled true
-    @bgColor = {1, 1, 1, 1}
+    @bgColor = {1, 1, 1}
 
     if font
       @font = Graphics.newFont font, @size
@@ -62,11 +63,11 @@ with SelectOpt
   .onDraw = =>
     box = @getBoundingBox!
     r, g, b, a = Graphics.getColor!
-    Graphics.setColor @color
+    Graphics.setColor @color[1], @color[2], @color[3], @alpha
     if @drawBg
-      Graphics.setColor @bgColor
+      Graphics.setColor @bgColor[1], @bgColor[2], @bgColor[3], @alpha
       Graphics.draw @textDrawable, box\getX! - @bgOffsetX , box\getY! - @bgOffsetY
-      Graphics.setColor @color
+      Graphics.setColor @color[1], @color[2], @color[3], @alpha
     Graphics.draw @textDrawable, box\getX!, box\getY!
     Graphics.setColor r, g, b, a
 
@@ -83,20 +84,39 @@ with SelectOpt
     @bgOffsetX = ox or @bgOffsetX
     @bgOffsetY = oy or @bgOffsetY
 
+  .onClick = (cb) =>
+    @Click = cb
+
+  .onHover = (cb) =>
+    @Hover = cb
+
+  .onLeave = (cb) =>
+    @Leave = cb
+
+  .onAfterClick = (cb) =>
+    @aClick = cb
+
   .onMouseEnter = =>
+    if @Hover
+      @Hover!
     @isHovred = true
     if Mouse.getSystemCursor "hand"
       Mouse.setCursor(Mouse.getSystemCursor("hand"))
 
   .onMouseLeave = =>
+    if @Leave
+      @Leave!
     @isHovred = false
     Mouse.setCursor!
 
   .onMouseDown = (x, y) =>
-    print "Start"
+    if @Click
+      @Click!
     @isPressed = true
 
   .onMouseUp = (x, y) =>
+    if @aClick
+      @aClick!
     @isPressed = false
 
 SelectOpt
