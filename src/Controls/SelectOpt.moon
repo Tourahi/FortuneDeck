@@ -15,8 +15,8 @@ SelectOpt = Control\extend "SelectOpt",{
   autoSize: true
   drawBg: true
   bgColor: nil
-  bgOffsetX: 5
-  bgOffsetY: 5
+  bgOffsetX: 3
+  bgOffsetY: 3
   alpha: 1
 }
 
@@ -70,9 +70,6 @@ with SelectOpt
       Graphics.setColor @color[1], @color[2], @color[3], @alpha
     Graphics.draw @textDrawable, box\getX!, box\getY!
     Graphics.setColor r, g, b, a
-
-  .onMouseDown = =>
-    print "Start"
 
   .setColor = (c) =>
     @color = c

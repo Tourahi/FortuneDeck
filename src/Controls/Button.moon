@@ -102,19 +102,39 @@ with Button
     Graphics.setColor r, g, b, a
 
 
+  .onClick = (cb) =>
+    @Click = cb
+
+  .onHover = (cb) =>
+    @Hover = cb
+
+  .onLeave = (cb) =>
+    @Leave = cb
+
+  .onAfterClick = (cb) =>
+    @aClick = cb
+
   .onMouseEnter = =>
+    if @Hover
+      @Hover!
     @isHovred = true
     if Mouse.getSystemCursor "hand"
       Mouse.setCursor(Mouse.getSystemCursor("hand"))
 
   .onMouseLeave = =>
+    if @Leave
+      @Leave!
     @isHovred = false
     Mouse.setCursor!
 
   .onMouseDown = (x, y) =>
+    if @Click
+      @Click!
     @isPressed = true
 
   .onMouseUp = (x, y) =>
+    if @aClick
+      @aClick!
     @isPressed = false
 
   .setIcon = (icon) =>

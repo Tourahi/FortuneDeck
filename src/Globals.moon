@@ -23,14 +23,29 @@ export G_StateMachine = StateMachine {
 export MajorArcana = {}
 export MinorArcana = {}
 
-Utils.recEnumerateFiles "/assets/majorA",MajorArcana
-Utils.recEnumerateFiles "/assets/minorA",MinorArcana
+-- Utils.recEnumerateFiles "/assets/majorA",MajorArcana
+-- Utils.recEnumerateFiles "/assets/minorA",MinorArcana
 
 -- Window
 export WindowSettings = {
   vsync: true,
   fullscreen: false,
   resizable: true
+}
+
+export Fonts = {
+  Basteleur: 'assets/fonts/basteleur/fonts/ttf/Basteleur-Bold.ttf'
+}
+
+export Assets = {
+  logo: 'assets/Logo.png'
+  moon: {
+    'assets/WhiteM/moon_new.png'
+    'assets/WhiteM/moon_waxing_crescent.png'
+    'assets/WhiteM/moon_first_qaurter.png'
+    'assets/WhiteM/moon_waxing_gibbous.png'
+    'assets/WhiteM/moon_full.png'
+  }
 }
 
 -- size of the actual window

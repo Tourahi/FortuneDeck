@@ -12,6 +12,13 @@ CButton = Button\extend "CButton",{
   font: nil
   textDrawable: nil
   iconImg: nil
+  rot: 0
+  scaleX: 1
+  scaleY: 1
+  originOffsetX: 0
+  originOffsetY: 0
+  shearingX: 0
+  shearingY: 0
 }
 
 
@@ -58,8 +65,8 @@ with CButton
     -- text/icon drawing and alignment
 
     text = @textDrawable
-    textW = text and text\getWidth! or 0
-    textH = text and text\getHeight! or 0
+    textW = text and text\getWidth! * @scaleX or 0
+    textH = text and text\getHeight! * @scaleY or 0
     textX = box.x - textW/2
     textY = box.y - textH/2
 
@@ -72,7 +79,11 @@ with CButton
       sf = @stencileFunc!
       Graphics.stencil sf, "replace", 1
       Graphics.setStencilTest "greater", 0
-      Graphics.draw @iconImg, box.x - @iconImg\getWidth!*0.5, box.y - @iconImg\getHeight!*0.5
+      Graphics.draw @iconImg, (box.x - (@iconImg\getWidth!*0.5) * @scaleX),
+        (box.y - (@iconImg\getHeight!*0.5) * @scaleY),
+        @rot, @scaleX, @scaleY
+
+      -- Graphics.draw @iconImg, box.x - @iconImg\getWidth!*0.5, box.y - @iconImg\getHeight!*0.5
       Graphics.setStencilTest!
       Graphics.setColor color[1], color[2], color[3], color[4]
 
@@ -99,6 +110,10 @@ with CButton
   .stencileFunc = =>
     box = @getBoundingBox!
     return () -> Graphics.circle "fill", box.x, box.y, box.r
+
+  .setScale = (sx = nil, sy = nil) =>
+    @scaleX = sx or @scaleX
+    @scaleY = sy or @scaleY
 
 
 

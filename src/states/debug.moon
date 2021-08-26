@@ -9,7 +9,6 @@ class Debug extends Base
   enter: (params) =>
 
   update: (dt) =>
-    MainMenu\update!
 
   draw: =>
 
