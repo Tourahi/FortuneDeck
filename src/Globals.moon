@@ -1,7 +1,9 @@
 export Graphics = love.graphics
 export Window = love.window
 export Keyboard = love.keyboard
+export Audio = love.audio
 export Filesystem = love.filesystem
+export Mouse = love.mouse
 export Push  = assert require 'libs/push'
 
 assert require 'src/Utils'
@@ -46,7 +48,13 @@ export Assets = {
     'assets/WhiteM/moon_waxing_gibbous.png'
     'assets/WhiteM/moon_full.png'
   }
+  sounds: {
+    "bowl": Audio.newSource "assets/sounds/bowl.wav", "stream"
+    "welcome": Audio.newSource "assets/sounds/welcome.wav", "stream"
+  }
 }
+
+
 
 -- size of the actual window
 export WINDOW_WIDTH = 1280

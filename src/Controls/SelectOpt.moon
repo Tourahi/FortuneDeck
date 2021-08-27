@@ -116,6 +116,9 @@ with SelectOpt
       @aClick!
     @isPressed = false
 
+  .setAlpha = (a) =>
+    @alpha = a
+
 SelectOpt
 
 

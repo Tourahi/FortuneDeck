@@ -44,6 +44,44 @@ Root.resize = function(self, w, h)
   self.tipContainer:setSize(w, h)
 end
 
+Root.dropChildrenAll = function(self)
+  self.coreContainer:dropChildren();
+  self.popupContainer:dropChildren();
+  self.optionContainer:dropChildren();
+  self.tipContainer:dropChildren();
+end
 
+Root.dropChildrenCore = function(self)
+  self.coreContainer:dropChildren();
+end
+
+Root.dropChildrenTip = function(self)
+  self.coreContainer:dropChildren();
+end
+
+Root.dropChildrenPopup = function(self)
+  self.coreContainer:dropChildren();
+end
+
+Root.dropChildrenOption = function(self)
+  self.coreContainer:dropChildren();
+end
+
+Root.addChildCore = function(self, child)
+  self.coreContainer:addChild(child);
+end
+
+
+Root.addChildPopup = function(self, child)
+  self.popupContainer:addChild(child);
+end
+
+Root.addChildOption = function(self, child)
+  self.optionContainer:addChild(child);
+end
+
+Root.addChildTip = function(self, child)
+  self.tipContainer:addChild(child);
+end
 
 return Root;
