@@ -32,7 +32,7 @@ export MinorArcana = {}
 export WindowSettings = {
   vsync: true,
   fullscreen: false,
-  resizable: true
+  resizable: false
 }
 
 export Fonts = {
