@@ -1,29 +1,27 @@
-local base = MeowC.base;
-local class = require(base .. ".src.libs.30log");
-
-local Timer = class("Timer", {
-  time,
-  onDone,
-  duration
-});
-
-
-Timer.init = function(self, duration, onDone)
-  self.time = 0;
-  self.onDone = onDone;
-  self.duration = duration;
-end
+local Timer = {};
 
 Timer.ticks = function(frames)
-  return frames * (1/ love.timer.getFPS());
+  return frames;
 end
 
-Timer.tick = function(self, owner, dt)
+local tick = function(self, owner, dt)
   self.time = self.time + (1 * dt);
+
   if self.time >= self.duration then
     self:onDone(owner);
-    owner.timer = nil;
   end
+end
+
+Timer.create = function(duration, onDone)
+  local obj = {};
+
+  obj.time = 0;
+  obj.duration = duration;
+  obj.onDone = onDone;
+
+  obj.tick = tick;
+
+  return obj;
 end
 
 return Timer;

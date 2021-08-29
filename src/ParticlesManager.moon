@@ -4,6 +4,7 @@ import insert from table
 
 PSmanager = {}
 
+Timer = MeowC.core.Timer
 
 callbacks = {
   'update'
@@ -46,6 +47,8 @@ with PSmanager
             .followMouse = false
             .texturePath = nil
             .system\stop!
+            .active = false
+            .timer = nil
       elseif Filesystem.getInfo(fileExt).type == "directory"
         @requireSystems fileExt
 
@@ -72,14 +75,26 @@ with PSmanager
 
   .stop = (Pname) =>
     @systems[Pname].system\stop!
+    @deactivateTimer Pname
 
   .update = (dt) =>
     for _, pdata in pairs @systems
-      pdata.system\update dt
+      if pdata.timer
+        pdata.timer.tick pdata.timer, pdata,  dt
+      if pdata.active
+        pdata.system\update dt
+
+  .setActive = (Pname, a) =>
+    @systems[Pname].active = a
 
    -- pos : {x,y}
   .addParticleSpawnPos = (Pname, pos) =>
     insert @systems[Pname].spawnPositions, pos
+
+  .deactivateTimer = (Pname) =>
+    @systems[Pname].timer = Timer.create Timer.ticks(5), (owner, dt) ->
+      @systems[Pname].active = false
+      @systems[Pname].timer = nil
 
   .draw = =>
     r, g, b, a = Graphics.getColor!
@@ -87,11 +102,12 @@ with PSmanager
     shader = Graphics.getShader!
     Graphics.push!
     for _, pdata in pairs @systems
-      sys = pdata.system
-      Graphics.setBlendMode pdata.blendMode
-      Graphics.setShader pdata.shader
-      for _, pos in ipairs pdata.spawnPositions
-        Graphics.draw sys, pos.x, pos.y
+      if pdata.active
+        sys = pdata.system
+        Graphics.setBlendMode pdata.blendMode
+        Graphics.setShader pdata.shader
+        for _, pos in ipairs pdata.spawnPositions
+          Graphics.draw sys, pos.x, pos.y
     Graphics.pop!
     Graphics.setColor r, g, b, a
     Graphics.setBlendMode bMode

@@ -29,8 +29,9 @@ with MainMenu
     @moonWaxingG = CButton\new!
     @moonFull = CButton\new!
 
+    PSmanager\setActive 'stars', true
     PSmanager\addParticleSpawnPos 'stars', {x:0,y:0}
-    PSmanager\kickstart 'stars'
+    PSmanager\start 'stars'
 
 
     with @Reading
