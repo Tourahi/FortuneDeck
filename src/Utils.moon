@@ -9,7 +9,7 @@ export Utils = {}
 
 with Utils
   .getFileName = (u) ->
-    return u\match("[%a]+")
+    return u\match("[%w]+")
 
   .getFileExtention = (u) ->
     return u\match("[^.]+$")

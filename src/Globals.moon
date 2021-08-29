@@ -25,8 +25,8 @@ export G_StateMachine = StateMachine {
 export MajorArcana = {}
 export MinorArcana = {}
 
--- Utils.recEnumerateFiles "/assets/majorA",MajorArcana
--- Utils.recEnumerateFiles "/assets/minorA",MinorArcana
+Utils.recEnumerateFiles "/assets/majorA",MajorArcana
+Utils.recEnumerateFiles "/assets/minorA",MinorArcana
 
 -- Window
 export WindowSettings = {
