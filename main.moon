@@ -1,6 +1,7 @@
 assert require 'src/Globals'
 PSmanager = assert require 'src/ParticlesManager'
 str = assert require 'assets/ParticaleSystems/stars'
+
 with love
   .load = ->
     PSmanager\init 'assets/ParticaleSystems'
@@ -13,7 +14,5 @@ with love
     G_StateMachine\update dt
 
   .draw = ->
-    Push\start!
     G_StateMachine\draw!
-    Push\finish!
 

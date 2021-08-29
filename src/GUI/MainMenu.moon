@@ -3,6 +3,7 @@ CButton = assert require 'src/Controls/CircleButton'
 Manager = MeowC.core.Manager
 Colors = MeowC.core.Colors
 Flux = MeowC.core.Flux
+PSmanager = assert require 'src/ParticlesManager'
 
 
 MainMenu = {}
@@ -27,6 +28,10 @@ with MainMenu
     @moonFirstQ = CButton\new!
     @moonWaxingG = CButton\new!
     @moonFull = CButton\new!
+
+    PSmanager\addParticleSpawnPos 'stars', {x:0,y:0}
+    PSmanager\kickstart 'stars'
+
 
     with @Reading
       \setPos WINDOW_W/2 - (@Reading.textDrawable\getWidth! / 2) , WINDOW_H/2.4
@@ -64,6 +69,7 @@ with MainMenu
       \setIcon Assets.logo
       \setEnabled false
       \onClick () ->
+        PSmanager\stop 'stars'
 
     with @moonNew
       \setRadius 64

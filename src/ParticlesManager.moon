@@ -4,11 +4,28 @@ import insert from table
 
 PSmanager = {}
 
+
+callbacks = {
+  'update'
+  'draw'
+}
+
 with PSmanager
   .init = (folder) =>
     @folder = folder
     @systems = {}
     @requireSystems!
+    @activatedSystems = {}
+  -- register callback
+    oldCallbacks = {}
+    emptyF = () ->
+    for _, f in ipairs callbacks
+      oldCallbacks[f] = love[f] or emptyF
+      love[f] = (...) ->
+       if self[f]
+        self[f](self, ...)
+        oldCallbacks[f](...)
+
 
   .requireSystems = (fldr = nil) =>
     folder = fldr or @folder
@@ -28,39 +45,46 @@ with PSmanager
             .active = false
             .followMouse = false
             .texturePath = nil
+            .system\stop!
       elseif Filesystem.getInfo(fileExt).type == "directory"
         @requireSystems fileExt
 
-  .initOrResetParticle = (Pname) =>
+  .kickstart = (Pname) =>
     pdata = @systems[Pname]
     system = pdata.system
-    system\reset!
+    system\start!
 
     for _ = 1, pdata.kickStartSteps
       system\update pdata.kickStartDt
     system\emit pdata.emitAtStart
 
-  .startParticle = (Pname) =>
-    @systems[Pname].active = true
+  .reset = (Pname) =>
+    pdata = @systems[Pname]
+    system = pdata.system
+    system\start!
+
+    for _ = 1, pdata.kickStartSteps
+      system\update pdata.kickStartDt
+    system\emit pdata.emitAtStart
+
+  .start = (Pname) =>
     @systems[Pname].system\start!
 
-  .stopParticle = (Pname) =>
-    @systems[Pname].active = false
+  .stop = (Pname) =>
     @systems[Pname].system\stop!
-
-  .setActive = (Pname ,a) =>
-    @systems[Pname].active = a
 
   .update = (dt) =>
     for _, pdata in pairs @systems
-      if pdata.active
-        pdata.system\update dt
+      pdata.system\update dt
 
    -- pos : {x,y}
   .addParticleSpawnPos = (Pname, pos) =>
     insert @systems[Pname].spawnPositions, pos
 
   .draw = =>
+    r, g, b, a = Graphics.getColor!
+    bMode = Graphics.getBlendMode!
+    shader = Graphics.getShader!
     Graphics.push!
     for _, pdata in pairs @systems
       sys = pdata.system
@@ -69,13 +93,9 @@ with PSmanager
       for _, pos in ipairs pdata.spawnPositions
         Graphics.draw sys, pos.x, pos.y
     Graphics.pop!
-
-
-
-
-
-
-
+    Graphics.setColor r, g, b, a
+    Graphics.setBlendMode bMode
+    Graphics.setShader shader
 
 
 return PSmanager

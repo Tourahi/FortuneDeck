@@ -15,15 +15,7 @@ local Manager = class("Manager", {
 });
 
 local callbacks = {
-  'update',
-  'draw',
-  'mousemoved',
-  'mousepressed',
-  'mousereleased',
-  'keypressed',
-  'keyreleased',
-  'wheelmoved',
-  'textinput'
+
 }
 
 
