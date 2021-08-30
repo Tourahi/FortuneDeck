@@ -18,10 +18,12 @@ export Input = input!
 -- States
 Main = assert require 'src/states/main'
 Deck = assert require 'src/states/deck'
+MinorAV = assert require 'src/states/mArcanaView'
 
 export G_StateMachine = StateMachine {
   ['main']: (params) -> Main params
   ['deck']: (params) -> Deck params
+  ['minorav']: (params) -> MinorAV params
 }
 
 -- Assets
@@ -49,7 +51,8 @@ export WindowSettings = {
 
 export Fonts = {
   Basteleur: 'assets/fonts/basteleur/fonts/ttf/Basteleur-Bold.ttf'
-  ArabicM: 'assets/fonts/arabic-magic/Arabic Magic.ttf'
+  OuroborosR: 'assets/fonts/ouroboros-master/fonts/Ouroboros-Regular.otf'
+  TricksterM: 'assets/fonts/Trickster-master/fonts/Trickster-Reg.ttf'
 }
 
 export Assets = {

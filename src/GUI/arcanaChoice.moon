@@ -17,10 +17,10 @@ with arcanaC
 
     @root = Manager\getInstanceRoot!
 
-    @Major = SelectOpt\new Fonts.ArabicM,
+    @Major = SelectOpt\new Fonts.OuroborosR,
       "Major", Colors.green, 90
 
-    @Minor = SelectOpt\new Fonts.ArabicM,
+    @Minor = SelectOpt\new Fonts.OuroborosR,
       "Minor", Colors.magenta, 90
 
     with @Major
@@ -33,6 +33,9 @@ with arcanaC
         @Major\setBgColor Colors.magenta
       \onLeave () ->
         @Major\setBgColor Colors.white
+      \onClick () ->
+        @gotoMinorAV!
+
 
     with @Minor
       \setAlpha 0
@@ -44,6 +47,7 @@ with arcanaC
         @Minor\setBgColor Colors.green
       \onLeave () ->
         @Minor\setBgColor Colors.white
+
 
     @root\addChildCore @Major
     @root\addChildCore @Minor
@@ -70,6 +74,13 @@ with arcanaC
 
     Log.info "All 56 cards loaded : ", n == 56
 
+  .gotoMinorAV = =>
+    @root.coreContainer\disableChildren!
+    Flux.to @Major, 2, {alpha: 0}
+    t = Flux.to @Minor, 2, {alpha: 0}
+    t\oncomplete () ->
+      @root\dropChildrenCore!
+      G_StateMachine\change 'minorav'
 
 
 

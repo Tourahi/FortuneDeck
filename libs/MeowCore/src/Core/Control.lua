@@ -340,6 +340,18 @@ Control.dropChildren = function(self)
   self.children = {};
 end
 
+Control.disableChildren = function(self)
+  for i,v in ipairs(self.children) do
+    v:setEnabled(false);
+  end
+end
+
+Control.enableChildren = function(self)
+  for i,v in ipairs(self.children) do
+    v:setEnabled(true);
+  end
+end
+
 Control.sortChildren = function(self)
   table.sort(self.children, function(a, b)
     return a.depth < b.depth;

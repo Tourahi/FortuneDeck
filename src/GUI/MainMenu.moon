@@ -170,7 +170,7 @@ with MainMenu
               \onClick () -> nil
 
   .gotoDeck = =>
-    @anim_disableAll!
+    @root.coreContainer\disableChildren!
     Flux.to @Deck, 2, {alpha: 0}
     Flux.to @moonNew, 2, {alpha: 0}
     Flux.to @moonWaxingC, 2, {alpha: 0}
