@@ -59,10 +59,10 @@ with MainMenu
       \onLeave () ->
         @Deck\setBgColor Colors.white
       \onClick () ->
-        @Deck\setEnabled false
-        t = Flux.to @Deck, 2, {alpha: 0}
-        t\oncomplete () ->
-          @root\removeChildCore @Deck
+        -- @Deck\setEnabled false
+        @gotoDeck!
+        --t\oncomplete () ->
+          --@root\removeChildCore @Deck
 
     with @logo
       \setRadius 30
@@ -168,6 +168,23 @@ with MainMenu
             @anim_enableAll!
             with @moonNew
               \onClick () -> nil
+
+  .gotoDeck = =>
+    @anim_disableAll!
+    Flux.to @Deck, 2, {alpha: 0}
+    Flux.to @moonNew, 2, {alpha: 0}
+    Flux.to @moonWaxingC, 2, {alpha: 0}
+    Flux.to @moonFirstQ, 2, {alpha: 0}
+    Flux.to @moonWaxingG, 2, {alpha: 0}
+    Flux.to @moonFull, 2, {alpha: 0}
+    Flux.to @logo, 2, {alpha: 0}
+    t = Flux.to @Reading, 2, {alpha: 0}
+    t\oncomplete () ->
+      @root\dropChildrenCore!
+      G_StateMachine\change 'deck'
+
+
+
 
 
 

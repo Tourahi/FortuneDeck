@@ -1,7 +1,7 @@
 Control = MeowC.core.Control
-import Colors from MeowUI.core.Theme
+import Colors from MeowC.core.Theme
 Graphics = love.graphics
-import Flux from MeowUI.core
+import Flux from MeowC.core
 
 -- Extend from the Control class
 ImageCanvas = Control\extend "ImageCanvas",{
@@ -19,14 +19,17 @@ ImageCanvas = Control\extend "ImageCanvas",{
 }
 
 with ImageCanvas
-  .init = (fileName) =>
+  .init = (img) =>
     -- call the parent constructor
     @super.init(self)
 
     @setClip true
     @setEnabled true
-
-    @setImage fileName
+    if type(img) == 'string'
+      @setImage img
+    else
+      @drawable = img
+      @resetSize!
 
     -- event Connections
     @on "UI_DRAW", @onDraw, self

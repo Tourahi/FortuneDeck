@@ -18,8 +18,9 @@ with Utils
     for _, file in ipairs files
       assert require Utils.getFileName(file)
 
-  .assetsRequire = (asset, fileList) ->
-    insert fileList, Graphics.newImage(asset)
+  .assetsRequire = (asset, fileList, item) ->
+    itm =  Utils.getFileName item
+    fileList[itm] = Graphics.newImage(asset)
 
   .scriptsequire = (file, fileList) ->
     insert fileList, assert require(file)
@@ -33,7 +34,7 @@ with Utils
       file = folder .. "/" .. item
       if Filesystem.getInfo(file).type == "file"
         if Utils.getFileExtention(item) == 'png' or Utils.getFileExtention(item) == 'jpg'
-          Utils.assetsRequire file, fileList
+          Utils.assetsRequire file, fileList, item
         elseif Utils.getFileExtention(item) == 'lua'
           Utils.scriptsequire file, fileList
       elseif Filesystem.getInfo(file).type == "directory"

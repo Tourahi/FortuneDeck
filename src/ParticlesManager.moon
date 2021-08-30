@@ -92,9 +92,10 @@ with PSmanager
     insert @systems[Pname].spawnPositions, pos
 
   .deactivateTimer = (Pname) =>
-    @systems[Pname].timer = Timer.create Timer.ticks(5), (owner, dt) ->
+    @systems[Pname].timer = Timer.create Timer.ticks(5.5), (owner, dt) ->
       @systems[Pname].active = false
       @systems[Pname].timer = nil
+      Log.debug @systems[Pname].active == false
 
   .draw = =>
     r, g, b, a = Graphics.getColor!

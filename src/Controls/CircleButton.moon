@@ -19,6 +19,7 @@ CButton = Button\extend "CButton",{
   originOffsetY: 0
   shearingX: 0
   shearingY: 0
+  alpha: 1
 }
 
 
@@ -59,7 +60,7 @@ with CButton
     else
       color = @theme.disableColor
 
-    Graphics.setColor color[1], color[2], color[3], color[4]
+    Graphics.setColor color[1], color[2], color[3], @alpha
     Graphics.circle 'fill', box.x, box.y, box.r
 
     -- text/icon drawing and alignment
@@ -73,9 +74,9 @@ with CButton
     icon = @iconImg
     if icon
       if not @isPressed
-        Graphics.setColor r, g, b, a
+        Graphics.setColor r, g, b, @alpha
       if @isHovred
-        Graphics.setColor color[1], color[2], color[3], color[4]
+        Graphics.setColor color[1], color[2], color[3], @alpha
       sf = @stencileFunc!
       Graphics.stencil sf, "replace", 1
       Graphics.setStencilTest "greater", 0
@@ -85,7 +86,7 @@ with CButton
 
       -- Graphics.draw @iconImg, box.x - @iconImg\getWidth!*0.5, box.y - @iconImg\getHeight!*0.5
       Graphics.setStencilTest!
-      Graphics.setColor color[1], color[2], color[3], color[4]
+      Graphics.setColor color[1], color[2], color[3], @alpha
 
     -- Border drawing
     if @enabled
@@ -94,7 +95,7 @@ with CButton
       Graphics.setLineStyle "smooth"
       local color
       color = @theme.strokeColor
-      Graphics.setColor color[1], color[2], color[3], color[4]
+      Graphics.setColor color[1], color[2], color[3], @alpha
       Graphics.circle 'line', box.x, box.y, box.r
       Graphics.setLineWidth oldLW
 
@@ -102,7 +103,7 @@ with CButton
     if text
       local color
       color = @theme.fontColor
-      Graphics.setColor color[1], color[2], color[3], color[4]
+      Graphics.setColor color[1], color[2], color[3], @alpha
       Graphics.draw text, textX, textY
 
     Graphics.setColor r, g, b, a

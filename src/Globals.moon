@@ -5,6 +5,7 @@ export Audio = love.audio
 export Filesystem = love.filesystem
 export Mouse = love.mouse
 export Push  = assert require 'libs/push'
+export Log = assert require 'libs/log/log'
 
 assert require 'src/Utils'
 assert require 'libs/MeowCore'
@@ -15,18 +16,29 @@ input = assert require 'libs/Input'
 export Input = input!
 
 -- States
-Debug = assert require 'src/states/debug'
+Main = assert require 'src/states/main'
+Deck = assert require 'src/states/deck'
 
 export G_StateMachine = StateMachine {
-  ['debug']: (params) -> Debug params
+  ['main']: (params) -> Main params
+  ['deck']: (params) -> Deck params
 }
 
 -- Assets
 export MajorArcana = {}
-export MinorArcana = {}
+export MinorArcana = {
+  cups: {}
+  pentacles: {}
+  swords: {}
+  wands: {}
+}
 
 Utils.recEnumerateFiles "/assets/majorA",MajorArcana
-Utils.recEnumerateFiles "/assets/minorA",MinorArcana
+Utils.recEnumerateFiles "/assets/minorA/cups",MinorArcana.cups
+Utils.recEnumerateFiles "/assets/minorA/pentacles",MinorArcana.pentacles
+Utils.recEnumerateFiles "/assets/minorA/swords",MinorArcana.swords
+Utils.recEnumerateFiles "/assets/minorA/wands",MinorArcana.wands
+
 
 -- Window
 export WindowSettings = {
@@ -37,6 +49,7 @@ export WindowSettings = {
 
 export Fonts = {
   Basteleur: 'assets/fonts/basteleur/fonts/ttf/Basteleur-Bold.ttf'
+  ArabicM: 'assets/fonts/arabic-magic/Arabic Magic.ttf'
 }
 
 export Assets = {
