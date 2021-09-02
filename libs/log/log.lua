@@ -10,7 +10,7 @@
 local log = { _version = "0.1.1" }
 
 log.usecolor = true
-log.outfile = 'log_out.log'
+log.outfile = nil
 log.level = "trace"
 log.ptf = false
 
@@ -22,11 +22,6 @@ local modes = {
   { name = "error", color = "\27[31m", },
   { name = "fatal", color = "\27[35m", },
 }
-
-log.printToFile = function(o)
-  o = o or false
-  log.ptf = o
-end
 
 log.logFileName = function(name)
   log.outfile = name or log.outfile
@@ -82,15 +77,13 @@ for i, x in ipairs(modes) do
                         lineinfo,
                         msg))
 
-    if log.ptf then
-      -- Output to log file
-      if log.outfile then
-        local fp = io.open(log.outfile, "a")
-        local str = string.format("[%-6s%s] %s: %s\n",
-                                  nameupper, os.date(), lineinfo, msg)
-        fp:write(str)
-        fp:close()
-      end
+    if log.outfile then
+    -- Output to log file
+      local fp = io.open(log.outfile, "a")
+      local str = string.format("[%-6s%s] %s: %s\n",
+                                nameupper, os.date(), lineinfo, msg)
+      fp:write(str)
+      fp:close()
     end
   end
 end
