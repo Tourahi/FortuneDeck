@@ -17,15 +17,6 @@ with PSmanager
     @systems = {}
     @requireSystems!
     @activatedSystems = {}
-  -- register callback
-    oldCallbacks = {}
-    emptyF = () ->
-    for _, f in ipairs callbacks
-      oldCallbacks[f] = love[f] or emptyF
-      love[f] = (...) ->
-       if self[f]
-        self[f](self, ...)
-        oldCallbacks[f](...)
 
 
   .requireSystems = (fldr = nil) =>

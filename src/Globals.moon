@@ -44,7 +44,7 @@ Utils.recEnumerateFiles "/assets/minorA/wands",MinorArcana.wands
 
 -- Window
 export WindowSettings = {
-  vsync: true,
+  vsync: false,
   fullscreen: false,
   resizable: false
 }
@@ -77,5 +77,5 @@ export WINDOW_WIDTH = 1280
 export WINDOW_HEIGHT = 720
 
 -- virtual size
-export VIRTUAL_WIDTH = 432
-export VIRTUAL_HEIGHT = 243
+export VIRTUAL_WIDTH = 1280
+export VIRTUAL_HEIGHT = 720

@@ -29,20 +29,8 @@ local callbacks = {
 
 
 Manager.init = function(self)
-  self.rootCtrl = self:createRootCtrl()
-  self.rootCtrl:setEnabled(true);
-  -- register callback
-  local oldCallbacks = {}
-  local emptyF = function() return end
-  for _, f in ipairs(callbacks) do
-    oldCallbacks[f] = love[f] or emptyF;
-    love[f] = function (...)
-      oldCallbacks[f](...);
-      if self[f] then
-        self[f](self, ...);
-      end
-    end
-  end
+  Manager.rootCtrl = self:createRootCtrl();
+  Manager.rootCtrl:setEnabled(true);
 end
 
 
@@ -62,7 +50,7 @@ Manager.getInstanceRoot = function()
 end
 
 Manager.createRootCtrl = function(self)
-  local ctrl = Root();
+  local ctrl = Root:new();
   self.rootCtrl = ctrl;
   return ctrl;
 end
