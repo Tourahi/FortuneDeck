@@ -46,7 +46,7 @@ Utils.recEnumerateFiles "/assets/minorA/wands",MinorArcana.wands
 export WindowSettings = {
   vsync: false,
   fullscreen: false,
-  resizable: false
+  resizable: true
 }
 
 export Fonts = {

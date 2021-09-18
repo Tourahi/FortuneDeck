@@ -4,6 +4,12 @@ str = assert require 'assets/ParticaleSystems/stars'
 
 MManager = MeowC.core.Manager
 
+inGameMousePos = (x = 0, y = 0) ->
+  x, y = Push\toGame x, y
+  x = x or 0
+  y = y or 0
+  return x, y
+
 with love
   .load = ->
     PSmanager\init 'assets/ParticaleSystems'
@@ -24,18 +30,22 @@ with love
     Push\finish!
 
   .mousepressed = (x, y, button) ->
+    x, y = inGameMousePos x, y
     MManager\mousepressed x, y, button
 
   .keypressed = (key, is_r) ->
     MManager\keypressed key, is_r
 
   .mousemoved = (x, y, button) ->
+    x, y = inGameMousePos x, y
     MManager\mousemoved x, y, button
 
   .mousereleased = (x, y, button) ->
+    x, y = inGameMousePos x, y
     MManager\mousereleased x, y, button
 
   .wheelmoved = (x, y) ->
+    x, y = inGameMousePos x, y
     MManager\wheelmoved x, y
 
   .keyreleased = (key) ->

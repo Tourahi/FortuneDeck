@@ -71,6 +71,7 @@ with CButton
     textX = box.x - textW/2
     textY = box.y - textH/2
 
+
     icon = @iconImg
     if icon
       if not @isPressed
