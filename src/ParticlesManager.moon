@@ -52,6 +52,13 @@ with PSmanager
       system\update pdata.kickStartDt
     system\emit pdata.emitAtStart
 
+
+  .setArea = (Pname, dist, dx, dy, ang, drc) =>
+    pdata = @systems[Pname]
+    system = pdata.system
+    system\setEmissionArea dist, dx, dy, ang, drc
+
+
   .reset = (Pname) =>
     pdata = @systems[Pname]
     system = pdata.system

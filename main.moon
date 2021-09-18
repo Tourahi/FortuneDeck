@@ -56,4 +56,6 @@ with love
 
   .resize = (w, h) ->
     Push\resize w, h
+    PSmanager\setArea 'stars', 'uniform', w, h,
+      0, false
 
