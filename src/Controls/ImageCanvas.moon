@@ -33,6 +33,10 @@ with ImageCanvas
 
     -- event Connections
     @on "UI_DRAW", @onDraw, self
+    @on "UI_MOUSE_ENTER", @onMouseEnter, self
+    @on "UI_MOUSE_LEAVE", @onMouseLeave, self
+    @on "UI_MOUSE_DOWN", @onMouseDown, self
+    @on "UI_MOUSE_UP", @onMouseUp, self
 
   .setImage = (filename) =>
     if filename
@@ -84,6 +88,41 @@ with ImageCanvas
         @resetSize!
         @tween = Flux.to @getBoundingBox!, 2, { x: @parent\getX! + @parent.theme.stroke,
           y: @parent\getY! + @parent.theme.stroke }
+
+  .onClick = (cb) =>
+    @Click = cb
+
+  .onHover = (cb) =>
+    @Hover = cb
+
+  .onLeave = (cb) =>
+    @Leave = cb
+
+  .onAfterClick = (cb) =>
+    @aClick = cb
+
+  .onMouseEnter = =>
+    if @Hover
+      @Hover!
+    @isHovred = true
+    if Mouse.getSystemCursor "hand"
+      Mouse.setCursor(Mouse.getSystemCursor("hand"))
+
+  .onMouseLeave = =>
+    if @Leave
+      @Leave!
+    @isHovred = false
+    Mouse.setCursor!
+
+  .onMouseDown = (x, y) =>
+    if @Click
+      @Click!
+    @isPressed = true
+
+  .onMouseUp = (x, y) =>
+    if @aClick
+      @aClick!
+    @isPressed = false
 
 
 

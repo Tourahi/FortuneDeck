@@ -5,14 +5,22 @@ Graphics = love.graphics
 Content = Control\extend "Content",{
   theme: nil
   isHovered: false
+  backgroundColor: nil
+  transparency: nil
+  stroke: nil
+  strokeColor: nil
 }
 
 with Content
   .init = =>
     @super.init(self)
-    @theme = table.copy(Theme\getInstance!\getProperty "content")
+    theme = table.copy(Theme\getInstance!\getProperty "content")
     @setClip true
     @setEnabled true
+    @backgroundColor = theme.backgroundColor
+    @transparency = theme.transparency
+    @stroke = theme.stroke
+    @strokeColor = theme.strokeColor
     -- event Connections
     @on "UI_DRAW", @onDraw, self
     @on "UI_MOUSE_ENTER", @onMouseEnter, self
@@ -21,30 +29,33 @@ with Content
   .onDraw = =>
     Graphics.push!
     box = self\getBoundingBox!
-    color = @theme.backgroundColor
-    trsp = @theme.transparency
     r, g, b, a = Graphics.getColor!
-    Graphics.setColor color[1], color[2], color[3], trsp
+    Graphics.setColor @backgroundColor[1], @backgroundColor[2], @backgroundColor[3], @transparency
     Graphics.rectangle "fill", box\getX!, box\getY!, box\getWidth!, box\getHeight!
 
     -- Border
     oldLW = Graphics.getLineWidth!
-    Graphics.setLineWidth @theme.stroke
+    Graphics.setLineWidth @stroke
     Graphics.setLineStyle "rough"
-    local color
-    color = @theme.strokeColor
-    Graphics.setColor color[1], color[2], color[3], color[4]
+
+    Graphics.setColor @strokeColor[1], @strokeColor[2], @strokeColor[3], @strokeColor[4]
     Graphics.rectangle "line", box.x, box.y, box\getWidth!, box\getHeight!
     Graphics.setLineWidth oldLW
 
     Graphics.setColor r, g, b, a
     Graphics.pop!
 
-  .onMouseEnter = =>
-    print self
+  .setBackgroundColor = (bc) =>
+    @backgroundColor = bc
 
+  .setTransparency = (t) =>
+    @transparency = t
 
+  .setStroke = (s) =>
+    @stroke = s
 
+  .setStrokeColor = (sc) =>
+    @strokeColor = sc
 
 
 
