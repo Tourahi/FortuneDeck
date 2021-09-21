@@ -3,6 +3,8 @@ import insert from table
 
 M = assert require 'moon'
 
+ImageCanvas = assert require 'src/Controls/ImageCanvas'
+
 export Dump = M.p
 
 export Utils = {}
@@ -40,3 +42,12 @@ with Utils
       elseif Filesystem.getInfo(file).type == "directory"
         Utils.recEnumerateFiles file, fileList
 
+  .initArcanaControls = (majorArcana = {}, minorArcana = {}) =>
+    n = 0
+    for k, v in pairs MajorArcana
+      majorArcana[k] = ImageCanvas\new v
+    for k, suit in pairs MinorArcana
+      for k, v in pairs suit
+        n+=1
+        minorArcana[k] = ImageCanvas\new v
+    return majorArcana, minorArcana

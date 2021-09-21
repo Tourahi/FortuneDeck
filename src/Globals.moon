@@ -7,8 +7,9 @@ export Mouse = love.mouse
 export Push  = assert require 'libs/push'
 export Log = assert require 'libs/log/log'
 
-assert require 'src/Utils'
+
 assert require 'libs/MeowCore'
+assert require 'src/Utils'
 StateMachine = assert require 'src/StateMachine'
 
 

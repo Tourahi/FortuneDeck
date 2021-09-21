@@ -1,10 +1,11 @@
 Base = assert require 'src/states/baseState'
+MinorArcanaGUI = assert require 'src/GUI/MinorArcana'
 
 class MinorAV extends Base
 
   new: (minorA) =>
-    @minorA = minorA
     Log.debug "In MinorAV state"
+    MinorArcanaGUI\init minorA
 
   enter: (params) =>
 

@@ -6,11 +6,6 @@ PSmanager = {}
 
 Timer = MeowC.core.Timer
 
-callbacks = {
-  'update'
-  'draw'
-}
-
 with PSmanager
   .init = (folder) =>
     @folder = folder

@@ -12,6 +12,7 @@ with MainMenu
   .init = =>
     WINDOW_W = WINDOW_WIDTH
     WINDOW_H = WINDOW_HEIGHT
+    @anim_moon_speed = 0 -- sec
 
     @root = Manager\getInstanceRoot!
 
@@ -148,20 +149,20 @@ with MainMenu
     WINDOW_W = WINDOW_WIDTH
     WINDOW_H = WINDOW_HEIGHT
     @root\addChildCore @moonWaxingC
-    Flux.to(@moonWaxingC.boundingBox, 2, {x: @Reading\getX! + 300})\ease("cubicout")
-    t = Flux.to(@moonWaxingC.boundingBox, 2, {y: @Reading\getY! - 50})\ease("linear")
+    Flux.to(@moonWaxingC.boundingBox, @anim_moon_speed, {x: @Reading\getX! + 300})\ease("cubicout")
+    t = Flux.to(@moonWaxingC.boundingBox, @anim_moon_speed, {y: @Reading\getY! - 50})\ease("linear")
     t\oncomplete () ->
       @root\addChildCore @moonFirstQ
       @root\addChildCore @moonWaxingG
-      Flux.to(@moonWaxingG.boundingBox, 2, {x: @Reading\getX! - 80})\ease("cubicout")
-      t = Flux.to(@moonWaxingG.boundingBox, 2, {y: @Reading\getY! - 50})\ease("linear")
+      Flux.to(@moonWaxingG.boundingBox, @anim_moon_speed, {x: @Reading\getX! - 80})\ease("cubicout")
+      t = Flux.to(@moonWaxingG.boundingBox, @anim_moon_speed, {y: @Reading\getY! - 50})\ease("linear")
       t\oncomplete () ->
         @root\addChildCore @moonFull
-        Flux.to(@moonFull.boundingBox, 2, {x: @Reading\getX! - 125})\ease("cubicout")
-        t = Flux.to(@moonFull.boundingBox, 2, {y: @Reading\getY! + 90})\ease("linear")
+        Flux.to(@moonFull.boundingBox, @anim_moon_speed, {x: @Reading\getX! - 125})\ease("cubicout")
+        t = Flux.to(@moonFull.boundingBox, @anim_moon_speed, {y: @Reading\getY! + 90})\ease("linear")
         t\oncomplete () ->
-          Flux.to(@logo.boundingBox, 2, {x: WINDOW_W/2})\ease("cubicout")
-          t = Flux.to(@logo.boundingBox, 2, {y: WINDOW_H/2 + 150})\ease("linear")
+          Flux.to(@logo.boundingBox, @anim_moon_speed, {x: WINDOW_W/2})\ease("cubicout")
+          t = Flux.to(@logo.boundingBox, @anim_moon_speed, {y: WINDOW_H/2 + 150})\ease("linear")
           t\oncomplete () ->
             Assets.sounds["bowl"]\stop!
             Assets.sounds["welcome"]\play!
@@ -182,6 +183,9 @@ with MainMenu
     t\oncomplete () ->
       @root\dropChildrenCore!
       G_StateMachine\change 'deck'
+
+
+
 
 
 

@@ -15,6 +15,8 @@ with arcanaC
     @majorArcana = {}
     @minorArcana = {}
 
+    @initArcanaControls!
+
     @root = Manager\getInstanceRoot!
 
     @Major = SelectOpt\new Fonts.OuroborosR,
@@ -33,8 +35,6 @@ with arcanaC
         @Major\setBgColor Colors.magenta
       \onLeave () ->
         @Major\setBgColor Colors.white
-      \onClick () ->
-        @gotoMinorAV!
 
 
     with @Minor
@@ -47,14 +47,14 @@ with arcanaC
         @Minor\setBgColor Colors.green
       \onLeave () ->
         @Minor\setBgColor Colors.white
-
+      \onClick () ->
+        @gotoMinorAV @minorArcana
 
     @root\addChildCore @Major
     @root\addChildCore @Minor
 
     @optEmerging!
 
-    @initArcanaControls!
 
   .optEmerging = =>
     Flux.to @Major, 2, {alpha: 1}
@@ -74,13 +74,13 @@ with arcanaC
 
     Log.info "All 56 cards loaded : ", n == 56
 
-  .gotoMinorAV = =>
+  .gotoMinorAV = (p) =>
     @root.coreContainer\disableChildren!
     Flux.to @Major, 2, {alpha: 0}
     t = Flux.to @Minor, 2, {alpha: 0}
     t\oncomplete () ->
       @root\dropChildrenCore!
-      G_StateMachine\change 'minorav'
+      G_StateMachine\change 'minorav', p
 
 
 
