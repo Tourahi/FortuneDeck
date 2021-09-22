@@ -33,19 +33,11 @@ with MinorArcana
     @ContentSwords = Content\new!
     @ContentWands = Content\new!
 
-    with @ContentCups
-      \setPos 250, 200
-      \setSize 180, 303
-      \setClip true
-    with @ContentPentacles
-      \setPos 461, 200
-      \setSize 180, 303
-    with @ContentSwords
-      \setPos 672, 200
-      \setSize 180, 303
-    with @ContentWands
-      \setPos 883, 200
-      \setSize 180, 303
+    -- content nodes
+    @initContent @ContentCups, {250, 200}, {180, 303}, true
+    @initContent @ContentPentacles, {461, 200}, {180, 303}, true
+    @initContent @ContentSwords, {672, 200}, {180, 303}, true
+    @initContent @ContentWands, {883, 200}, {180, 303}, true
 
 
     -- selects
@@ -110,5 +102,11 @@ with MinorArcana
       \setEnabled enabled
       \setClip cliped
       \setBgOffset bgOffset[1], bgOffset[2]
+
+  .initContent = (node, pos, size, clipped) =>
+    with node
+      \setPos pos[1], pos[2]
+      \setSize size[1], size[2]
+      \setClip true
 
 

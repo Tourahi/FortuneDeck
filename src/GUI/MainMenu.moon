@@ -60,25 +60,22 @@ with MainMenu
       \onLeave () ->
         @Deck\setBgColor Colors.white
       \onClick () ->
-        -- @Deck\setEnabled false
+        @Deck\setEnabled false
         @gotoDeck!
-        --t\oncomplete () ->
-          --@root\removeChildCore @Deck
+        t\oncomplete () ->
+          @root\removeChildCore @Deck
 
+
+
+    @initCButton @logo, 30, {@logo\getRadius! + 10, WINDOW_H - @logo\getRadius! - 10}, Assets.logo, {1, 1}
     with @logo
-      \setRadius 30
-      \setPos @logo\getRadius! + 10, WINDOW_H - @logo\getRadius! - 10
-      \setIcon Assets.logo
       \setEnabled false
-      \onClick () ->
-        PSmanager\stop 'stars'
-
+    @initCButton @moonNew, 64, {WINDOW_W/2, WINDOW_H/4}, Assets.moon[1], {0.5, 0.5}
+    @initCButton @moonWaxingC, 64, {WINDOW_W/2, WINDOW_H/4}, Assets.moon[2], {0.5, 0.5}
+    @initCButton @moonFirstQ, 64, {WINDOW_W/2, WINDOW_H/4}, Assets.moon[3], {0.5, 0.5}
+    @initCButton @moonWaxingG, 64, {WINDOW_W/2, WINDOW_H/4}, Assets.moon[4], {0.5, 0.5}
+    @initCButton @moonFull, 64, {WINDOW_W/2, WINDOW_H/4}, Assets.moon[5], {0.5, 0.5}
     with @moonNew
-      \setRadius 64
-      --\setPos @Reading\getX! + 350, @Reading\getY! + 100
-      \setPos WINDOW_W/2 , WINDOW_H/4
-      \setIcon Assets.moon[1]
-      \setScale 0.5, 0.5
       \onClick () ->
         Flux.to(@Reading, 10, {alpha: 1})
         Flux.to(@Deck, 10, {alpha: 1})
@@ -88,35 +85,6 @@ with MainMenu
         t = Flux.to(@moonNew.boundingBox, 2, {y: @Reading\getY! + 100})\ease("linear")
         t\oncomplete () ->
           @anim_moon!
-
-
-    with @moonWaxingC
-      \setRadius 64
-      --\setPos @Reading\getX! + 350, @Reading\getY! + 100
-      \setPos WINDOW_W/2 , WINDOW_H/4
-      \setIcon Assets.moon[2]
-      \setScale 0.5, 0.5
-
-    with @moonFirstQ
-      \setRadius 64
-      --\setPos @Reading\getX! + 350, @Reading\getY! + 100
-      \setPos WINDOW_W/2 , WINDOW_H/4
-      \setIcon Assets.moon[3]
-      \setScale 0.5, 0.5
-
-    with @moonWaxingG
-      \setRadius 64
-      --\setPos @Reading\getX! + 350, @Reading\getY! + 100
-      \setPos WINDOW_W/2 , WINDOW_H/4
-      \setIcon Assets.moon[4]
-      \setScale 0.5, 0.5
-
-    with @moonFull
-      \setRadius 64
-      --\setPos @Reading\getX! + 350, @Reading\getY! + 100
-      \setPos WINDOW_W/2 , WINDOW_H/4
-      \setIcon Assets.moon[5]
-      \setScale 0.5, 0.5
 
     @root\addChildCore @Reading
     @root\addChildCore @Deck
@@ -184,7 +152,12 @@ with MainMenu
       @root\dropChildrenCore!
       G_StateMachine\change 'deck'
 
-
+  .initCButton = (node, rad, pos, icon, scale) =>
+    with node
+      \setRadius rad
+      \setPos pos[1], pos[2]
+      \setIcon icon
+      \setScale scale[1], scale[2]  
 
 
 
