@@ -49,54 +49,26 @@ with MinorArcana
     @root\addChildCore @ContentCups
     with @minorArcana['acecups']
       \setPos 10, 10
-      \onHover () ->
-        @Cups\setBgColor Colors.black
-        @ContentCups\setStrokeColor Colors.black
-        @slideSelectY @Cups, @Cups\getY! - 10
-      \onLeave () ->
-        @Cups\setBgColor Colors.white
-        @ContentCups\setStrokeColor Colors.grey
-        @slideSelectY @Cups, @Cups\getY!
+    @selectHover_anim @minorArcana['acecups'], @Cups, @ContentCups
 
     @ContentCups\addChild @minorArcana['acecups']
 
     @root\addChildCore @ContentPentacles
     with @minorArcana['acepentacles']
       \setPos 10, 10
-      \onHover () ->
-        @Pentacles\setBgColor Colors.black
-        @ContentPentacles\setStrokeColor Colors.black
-        @slideSelectY @Pentacles, @Pentacles\getY! - 10
-      \onLeave () ->
-        @Pentacles\setBgColor Colors.white
-        @ContentPentacles\setStrokeColor Colors.grey
-        @slideSelectY @Pentacles, @Pentacles\getY!
+    @selectHover_anim @minorArcana['acepentacles'], @Pentacles, @ContentPentacles
     @ContentPentacles\addChild @minorArcana['acepentacles']
 
     @root\addChildCore @ContentSwords
     with @minorArcana['aceswords']
       \setPos 10, 10
-      \onHover () ->
-        @Swords\setBgColor Colors.black
-        @ContentSwords\setStrokeColor Colors.black
-        @slideSelectY @Swords, @Swords\getY! - 10
-      \onLeave () ->
-        @Swords\setBgColor Colors.white
-        @ContentSwords\setStrokeColor Colors.grey
-        @slideSelectY @Swords, @Swords\getY!
+    @selectHover_anim @minorArcana['aceswords'], @Swords, @ContentSwords
     @ContentSwords\addChild @minorArcana['aceswords']
 
     @root\addChildCore @ContentWands
     with @minorArcana['acewands']
       \setPos 10, 10
-      \onHover () ->
-        @Wands\setBgColor Colors.black
-        @ContentWands\setStrokeColor Colors.black
-        @slideSelectY @Wands, @Wands\getY! - 10
-      \onLeave () ->
-        @Wands\setBgColor Colors.white
-        @ContentWands\setStrokeColor Colors.grey
-        @slideSelectY @Wands, @Wands\getY!
+    @selectHover_anim @minorArcana['acewands'], @Wands, @ContentWands
     @ContentWands\addChild @minorArcana['acewands']
 
     @root\addChildCore @Cups
@@ -121,5 +93,16 @@ with MinorArcana
   .slideSelectY = (node, y) =>
     Flux.to(node.boundingBox, 0.5, 
       {y: y})
+  
+  .selectHover_anim = (node, Select, ctnt) =>
+    with node
+      \onHover () ->
+        Select\setBgColor Colors.black
+        ctnt\setStrokeColor Colors.black
+        @slideSelectY Select, Select\getY! - 10
+      \onLeave () ->
+        Select\setBgColor Colors.white
+        ctnt\setStrokeColor Colors.grey
+        @slideSelectY Select, Select\getY!
 
 
