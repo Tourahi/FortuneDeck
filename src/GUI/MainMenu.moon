@@ -12,7 +12,7 @@ with MainMenu
   .init = =>
     WINDOW_W = WINDOW_WIDTH
     WINDOW_H = WINDOW_HEIGHT
-    @anim_moon_speed = 0 -- sec
+    @anim_moon_speed = 1 -- sec
 
     @root = Manager\getInstanceRoot!
 
@@ -46,7 +46,7 @@ with MainMenu
         @Reading\setBgColor Colors.white
       \onClick () ->
         @Reading\setEnabled false
-        t = Flux.to @Reading, 2, {alpha: 0}
+        t = Flux.to @Reading, @anim_moon_speed, {alpha: 0}
         t\oncomplete () ->
           @root\removeChildCore @Reading
 
@@ -60,14 +60,11 @@ with MainMenu
       \onLeave () ->
         @Deck\setBgColor Colors.white
       \onClick () ->
-        @Deck\setEnabled false
         @gotoDeck!
-        t\oncomplete () ->
-          @root\removeChildCore @Deck
 
 
 
-    @initCButton @logo, 30, {@logo\getRadius! + 10, WINDOW_H - @logo\getRadius! - 10}, Assets.logo, {1, 1}
+    @initCButton @logo, 30, {@logo\getRadius! + 20, WINDOW_H - @logo\getRadius! - 20}, Assets.logo
     with @logo
       \setEnabled false
     @initCButton @moonNew, 64, {WINDOW_W/2, WINDOW_H/4}, Assets.moon[1], {0.5, 0.5}
@@ -77,12 +74,12 @@ with MainMenu
     @initCButton @moonFull, 64, {WINDOW_W/2, WINDOW_H/4}, Assets.moon[5], {0.5, 0.5}
     with @moonNew
       \onClick () ->
-        Flux.to(@Reading, 10, {alpha: 1})
-        Flux.to(@Deck, 10, {alpha: 1})
+        Flux.to(@Reading, @anim_moon_speed, {alpha: 1})
+        Flux.to(@Deck, @anim_moon_speed, {alpha: 1})
         Assets.sounds["bowl"]\play!
         @anim_disableAll!
-        Flux.to(@moonNew.boundingBox, 2, {x: @Reading\getX! + 350})\ease("cubicout")
-        t = Flux.to(@moonNew.boundingBox, 2, {y: @Reading\getY! + 100})\ease("linear")
+        Flux.to(@moonNew.boundingBox, @anim_moon_speed, {x: @Reading\getX! + 350})\ease("cubicout")
+        t = Flux.to(@moonNew.boundingBox, @anim_moon_speed, {y: @Reading\getY! + 100})\ease("linear")
         t\oncomplete () ->
           @anim_moon!
 
@@ -152,7 +149,7 @@ with MainMenu
       @root\dropChildrenCore!
       G_StateMachine\change 'deck'
 
-  .initCButton = (node, rad, pos, icon, scale) =>
+  .initCButton = (node, rad, pos, icon, scale = {}) =>
     with node
       \setRadius rad
       \setPos pos[1], pos[2]
