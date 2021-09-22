@@ -10,6 +10,9 @@ SelectOpt = Control\extend "SelectOpt",{
   color: nil
   LineHight: 1
   size: 0
+  rot: 0
+  scaleX: 1
+  scaleY: 1
   font: nil
   textDrawable: nil
   autoSize: true
@@ -66,9 +69,9 @@ with SelectOpt
     Graphics.setColor @color[1], @color[2], @color[3], @alpha
     if @drawBg
       Graphics.setColor @bgColor[1], @bgColor[2], @bgColor[3], @alpha
-      Graphics.draw @textDrawable, box\getX! - @bgOffsetX , box\getY! - @bgOffsetY
+      Graphics.draw @textDrawable, box\getX! - @bgOffsetX , box\getY! - @bgOffsetY, @rot, @scaleX, @scaleY
       Graphics.setColor @color[1], @color[2], @color[3], @alpha
-    Graphics.draw @textDrawable, box\getX!, box\getY!
+    Graphics.draw @textDrawable, box\getX!, box\getY!, @rot, @scaleX, @scaleY
     Graphics.setColor r, g, b, a
 
   .setColor = (c) =>

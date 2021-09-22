@@ -39,6 +39,11 @@ Box.getSize = function(self)
 end
 
 
+Box.setSize = function(self, w, h)
+  self.width = w;
+  self.height = h;
+end
+
 Box.getWidth =  function(self)
   return self.width - self.x;
 end

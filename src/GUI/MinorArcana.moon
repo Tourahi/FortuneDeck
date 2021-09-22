@@ -52,9 +52,11 @@ with MinorArcana
       \onHover () ->
         @Cups\setBgColor Colors.black
         @ContentCups\setStrokeColor Colors.black
+        @slideSelectY @Cups, @Cups\getY! - 10
       \onLeave () ->
         @Cups\setBgColor Colors.white
         @ContentCups\setStrokeColor Colors.grey
+        @slideSelectY @Cups, @Cups\getY!
 
     @ContentCups\addChild @minorArcana['acecups']
 
@@ -64,9 +66,11 @@ with MinorArcana
       \onHover () ->
         @Pentacles\setBgColor Colors.black
         @ContentPentacles\setStrokeColor Colors.black
+        @slideSelectY @Pentacles, @Pentacles\getY! - 10
       \onLeave () ->
         @Pentacles\setBgColor Colors.white
         @ContentPentacles\setStrokeColor Colors.grey
+        @slideSelectY @Pentacles, @Pentacles\getY!
     @ContentPentacles\addChild @minorArcana['acepentacles']
 
     @root\addChildCore @ContentSwords
@@ -75,9 +79,11 @@ with MinorArcana
       \onHover () ->
         @Swords\setBgColor Colors.black
         @ContentSwords\setStrokeColor Colors.black
+        @slideSelectY @Swords, @Swords\getY! - 10
       \onLeave () ->
         @Swords\setBgColor Colors.white
         @ContentSwords\setStrokeColor Colors.grey
+        @slideSelectY @Swords, @Swords\getY!
     @ContentSwords\addChild @minorArcana['aceswords']
 
     @root\addChildCore @ContentWands
@@ -86,9 +92,11 @@ with MinorArcana
       \onHover () ->
         @Wands\setBgColor Colors.black
         @ContentWands\setStrokeColor Colors.black
+        @slideSelectY @Wands, @Wands\getY! - 10
       \onLeave () ->
         @Wands\setBgColor Colors.white
         @ContentWands\setStrokeColor Colors.grey
+        @slideSelectY @Wands, @Wands\getY!
     @ContentWands\addChild @minorArcana['acewands']
 
     @root\addChildCore @Cups
@@ -107,6 +115,11 @@ with MinorArcana
     with node
       \setPos pos[1], pos[2]
       \setSize size[1], size[2]
-      \setClip true
+      \setClip false
+      \setStroke 5
+
+  .slideSelectY = (node, y) =>
+    Flux.to(node.boundingBox, 0.5, 
+      {y: y})
 
 
