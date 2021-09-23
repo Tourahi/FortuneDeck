@@ -12,9 +12,6 @@ with arcanaC
     WINDOW_W = WINDOW_WIDTH
     WINDOW_H = WINDOW_HEIGHT
 
-    @majorArcana = {}
-    @minorArcana = {}
-
     @initArcanaControls!
 
     @root = Manager\getInstanceRoot!
@@ -48,7 +45,7 @@ with arcanaC
       \onLeave () ->
         @Minor\setBgColor Colors.white
       \onClick () ->
-        @gotoMinorAV @minorArcana
+        @gotoMinorAV!
 
     @root\addChildCore @Major
     @root\addChildCore @Minor
@@ -62,17 +59,6 @@ with arcanaC
     t\oncomplete () ->
       @Major\setEnabled true
       @Minor\setEnabled true
-
-  .initArcanaControls = =>
-    n = 0
-    for k, v in pairs MajorArcana
-      @majorArcana[k] = ImageCanvas\new v
-    for k, suit in pairs MinorArcana
-      for k, v in pairs suit
-        n+=1
-        @minorArcana[k] = ImageCanvas\new v
-
-    Log.info "All 56 cards loaded : ", n == 56
 
   .gotoMinorAV = (p) =>
     @root.coreContainer\disableChildren!
