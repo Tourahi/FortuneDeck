@@ -30,17 +30,38 @@ export G_StateMachine = StateMachine {
 -- Assets
 export MajorArcana = {}
 export MinorArcana = {
+  cups: {
+    name: "cups"
+  }
+  pentacles: {
+    name: "pentacles"
+  }
+  swords: {
+    name: "swords"
+  }
+  wands: {
+    name: "wands"
+  }
+}
+
+export MajorArcanaControls = {}
+export MinorArcanaControls = {
   cups: {}
   pentacles: {}
   swords: {}
   wands: {}
 }
 
+
 Utils.recEnumerateFiles "/assets/majorA",MajorArcana
 Utils.recEnumerateFiles "/assets/minorA/cups",MinorArcana.cups
 Utils.recEnumerateFiles "/assets/minorA/pentacles",MinorArcana.pentacles
 Utils.recEnumerateFiles "/assets/minorA/swords",MinorArcana.swords
 Utils.recEnumerateFiles "/assets/minorA/wands",MinorArcana.wands
+
+Utils.initArcanaControls!
+
+
 
 
 -- Window

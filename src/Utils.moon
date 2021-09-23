@@ -42,12 +42,21 @@ with Utils
       elseif Filesystem.getInfo(file).type == "directory"
         Utils.recEnumerateFiles file, fileList
 
-  .initArcanaControls = (majorArcana = {}, minorArcana = {}) =>
+  .initArcanaControls = () =>
     n = 0
     for k, v in pairs MajorArcana
-      majorArcana[k] = ImageCanvas\new v
+      insert MajorArcanaControls, ImageCanvas\new(v)
     for k, suit in pairs MinorArcana
       for k, v in pairs suit
-        n+=1
-        minorArcana[k] = ImageCanvas\new v
-    return majorArcana, minorArcana
+        if suit.name == "cups"
+          if v ~= suit.name
+            MinorArcanaControls["cups"][k] = ImageCanvas\new v
+        if suit.name == "pentacles"
+          if v ~= suit.name
+            MinorArcanaControls.pentacles[k] = ImageCanvas\new v
+        if suit.name == "swords"
+          if v ~= suit.name
+            MinorArcanaControls.swords[k] = ImageCanvas\new v
+        if suit.name == "wands"
+          if v ~= suit.name
+            MinorArcanaControls.wands[k] = ImageCanvas\new v         

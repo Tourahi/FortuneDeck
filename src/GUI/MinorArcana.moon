@@ -9,12 +9,9 @@ PSmanager = assert require 'src/ParticlesManager'
 MinorArcana = {}
 
 with MinorArcana
-  .init = (mA) =>
-    @minorA = mA
+  .init = =>
     WINDOW_W = WINDOW_WIDTH
     WINDOW_H = WINDOW_HEIGHT
-
-    @minorArcana = {}
 
     @Cups = SelectOpt\new Fonts.Basteleur,
       "Cups", Colors.steelblue, 30
@@ -25,7 +22,7 @@ with MinorArcana
     @Wands = SelectOpt\new Fonts.Basteleur,
       "Wands", Colors.firebrick, 30
 
-    _, @minorArcana = Utils.initArcanaControls!
+
 
     @root = Manager\getInstanceRoot!
     @ContentCups = Content\new!
@@ -47,29 +44,30 @@ with MinorArcana
     @initSelect @Wands, {915, 150}, false, false, {2, 2}
 
     @root\addChildCore @ContentCups
-    with @minorArcana['acecups']
-      \setPos 10, 10
-    @selectHover_anim @minorArcana['acecups'], @Cups, @ContentCups
 
-    @ContentCups\addChild @minorArcana['acecups']
+    with MinorArcanaControls.cups['acecups']
+      \setPos 10, 10
+    @selectHover_anim MinorArcanaControls.cups['acecups'], @Cups, @ContentCups
+
+    @ContentCups\addChild MinorArcanaControls.cups['acecups']
 
     @root\addChildCore @ContentPentacles
-    with @minorArcana['acepentacles']
+    with MinorArcanaControls.pentacles['acepentacles']
       \setPos 10, 10
-    @selectHover_anim @minorArcana['acepentacles'], @Pentacles, @ContentPentacles
-    @ContentPentacles\addChild @minorArcana['acepentacles']
+    @selectHover_anim MinorArcanaControls.pentacles['acepentacles'], @Pentacles, @ContentPentacles
+    @ContentPentacles\addChild MinorArcanaControls.pentacles['acepentacles']
 
     @root\addChildCore @ContentSwords
-    with @minorArcana['aceswords']
+    with MinorArcanaControls.swords['aceswords']
       \setPos 10, 10
-    @selectHover_anim @minorArcana['aceswords'], @Swords, @ContentSwords
-    @ContentSwords\addChild @minorArcana['aceswords']
+    @selectHover_anim MinorArcanaControls.swords['aceswords'], @Swords, @ContentSwords
+    @ContentSwords\addChild MinorArcanaControls.swords['aceswords']
 
     @root\addChildCore @ContentWands
-    with @minorArcana['acewands']
+    with MinorArcanaControls.wands['acewands']
       \setPos 10, 10
-    @selectHover_anim @minorArcana['acewands'], @Wands, @ContentWands
-    @ContentWands\addChild @minorArcana['acewands']
+    @selectHover_anim MinorArcanaControls.wands['acewands'], @Wands, @ContentWands
+    @ContentWands\addChild MinorArcanaControls.wands['acewands']
 
     @root\addChildCore @Cups
     @root\addChildCore @Pentacles
