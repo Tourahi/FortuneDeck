@@ -42,10 +42,11 @@ with Utils
       elseif Filesystem.getInfo(file).type == "directory"
         Utils.recEnumerateFiles file, fileList
 
-  .initArcanaControls = () =>
-    n = 0
+  .initArcanaControlsMajor = () =>
     for k, v in pairs MajorArcana
-      insert MajorArcanaControls, ImageCanvas\new(v)
+      insert MajorArcanaControls, ImageCanvas\new(v) 
+
+  .initArcanaControlsMinor = () =>
     for k, suit in pairs MinorArcana
       for k, v in pairs suit
         if suit.name == "cups"
@@ -59,4 +60,4 @@ with Utils
             MinorArcanaControls.swords[k] = ImageCanvas\new v
         if suit.name == "wands"
           if v ~= suit.name
-            MinorArcanaControls.wands[k] = ImageCanvas\new v         
+            MinorArcanaControls.wands[k] = ImageCanvas\new v 

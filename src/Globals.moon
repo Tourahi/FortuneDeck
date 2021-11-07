@@ -59,7 +59,6 @@ Utils.recEnumerateFiles "/assets/minorA/pentacles",MinorArcana.pentacles
 Utils.recEnumerateFiles "/assets/minorA/swords",MinorArcana.swords
 Utils.recEnumerateFiles "/assets/minorA/wands",MinorArcana.wands
 
-Utils.initArcanaControls!
 
 
 

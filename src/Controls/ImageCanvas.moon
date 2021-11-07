@@ -62,9 +62,18 @@ with ImageCanvas
   .setScale = (sx = nil, sy = nil) =>
     @scaleX = sx or @scaleX
     @scaleY = sy or @scaleY
+    @setSize @width * @scaleX, @height * @scaleY
 
   .getScale = =>
     @scaleX, @scaleY
+
+  -- @override
+  .getWidth = =>
+    @width * @scaleX
+
+  -- @override
+  .getHeight = =>
+    @height * @scaleY
 
   .setOriginOffset = (ox = nil, oy= nil) =>
     @originOffsetX = ox or @originOffsetX

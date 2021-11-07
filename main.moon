@@ -15,7 +15,7 @@ with love
     PSmanager\init 'assets/ParticaleSystems'
     Push\setupScreen VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
       WINDOW_WIDTH, WINDOW_HEIGHT, WindowSettings
-    G_StateMachine\change 'minorav'
+    G_StateMachine\change 'main'
 
   .update = (dt) ->
     PSmanager\update dt

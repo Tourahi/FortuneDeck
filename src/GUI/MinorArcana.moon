@@ -4,6 +4,7 @@ Manager = MeowC.core.Manager
 Colors = MeowC.core.Colors
 Flux = MeowC.core.Flux
 PSmanager = assert require 'src/ParticlesManager'
+CardsSpread = assert require 'src/GUI/CardsSpread'
 
 
 MinorArcana = {}
@@ -12,6 +13,8 @@ with MinorArcana
   .init = =>
     WINDOW_W = WINDOW_WIDTH
     WINDOW_H = WINDOW_HEIGHT
+
+    Utils.initArcanaControlsMinor!
 
     @Cups = SelectOpt\new Fonts.Basteleur,
       "Cups", Colors.steelblue, 30
@@ -66,6 +69,10 @@ with MinorArcana
     @root\addChildCore @ContentWands
     with MinorArcanaControls.wands['acewands']
       \setPos 10, 10
+      \onClick () ->
+        @root\dropChildrenCore!
+        CardsSpread\init MinorArcanaControls.wands
+
     @selectHover_anim MinorArcanaControls.wands['acewands'], @Wands, @ContentWands
     @ContentWands\addChild MinorArcanaControls.wands['acewands']
 

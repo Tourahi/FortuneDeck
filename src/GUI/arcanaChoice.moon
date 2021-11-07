@@ -12,7 +12,7 @@ with arcanaC
     WINDOW_W = WINDOW_WIDTH
     WINDOW_H = WINDOW_HEIGHT
 
-    @initArcanaControls!
+    -- @initArcanaControls!
 
     @root = Manager\getInstanceRoot!
 
