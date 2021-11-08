@@ -6,6 +6,7 @@ export Filesystem = love.filesystem
 export Mouse = love.mouse
 export Push  = assert require 'libs/push'
 export Log = assert require 'libs/log/log'
+export Talkies = assert require 'libs/talkies/talkies'
 
 
 assert require 'libs/MeowCore'
@@ -74,6 +75,7 @@ export Fonts = {
   Basteleur: 'assets/fonts/basteleur/fonts/ttf/Basteleur-Bold.ttf'
   OuroborosR: 'assets/fonts/ouroboros-master/fonts/Ouroboros-Regular.otf'
   TricksterM: 'assets/fonts/Trickster-master/fonts/Trickster-Reg.ttf'
+  FTitlesHand: 'assets/fonts/FoundationTitlesHand/FoundationTitlesHand-v0.85.ttf'
 }
 
 export Assets = {
@@ -100,3 +102,5 @@ export WINDOW_HEIGHT = 720
 -- virtual size
 export VIRTUAL_WIDTH = 1280
 export VIRTUAL_HEIGHT = 720
+
+assert require 'src/Oracle'

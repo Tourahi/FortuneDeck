@@ -27,5 +27,6 @@ with CardsSpread
         \setScale 0.5, 0.5
       @root\addChildCore v
       X += Off
+    Oracle.sayHello!
 
 

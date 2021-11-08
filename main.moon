@@ -18,6 +18,7 @@ with love
     G_StateMachine\change 'main'
 
   .update = (dt) ->
+    Talkies.update dt
     PSmanager\update dt
     MManager\update dt
     G_StateMachine\update dt
@@ -25,6 +26,7 @@ with love
   .draw = ->
     PSmanager\draw!
     Push\start!
+    Talkies.draw!
     G_StateMachine\draw!
     MManager\draw!
     Push\finish!
