@@ -95,6 +95,11 @@ export Assets = {
 
 
 
+-- Content
+Cards = assert require 'src/Content/Cards'
+export Content = Cards 'assets/content/interpretations.json'
+
+
 -- size of the actual window
 export WINDOW_WIDTH = 1280
 export WINDOW_HEIGHT = 720

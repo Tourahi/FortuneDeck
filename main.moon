@@ -13,8 +13,8 @@ inGameMousePos = (x = 0, y = 0) ->
 with love
   .load = ->
     PSmanager\init 'assets/ParticaleSystems'
-    Push\setupScreen VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
-      WINDOW_WIDTH, WINDOW_HEIGHT, WindowSettings
+    Push\setupScreen VIRTUAL_WIDTH,
+     VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, WindowSettings
     G_StateMachine\change 'main'
 
   .update = (dt) ->
